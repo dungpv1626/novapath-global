@@ -1,5 +1,9 @@
-import { auth } from '@/auth'
+import NextAuth from 'next-auth'
+import { authConfig } from '@/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Use edge-safe auth (no Prisma/bcryptjs) — session is JWT-based, no DB needed
+const { auth } = NextAuth(authConfig)
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']
 const MAX_SIZE = 5 * 1024 * 1024
