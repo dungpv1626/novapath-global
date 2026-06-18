@@ -1,0 +1,13 @@
+name = "novapath-app"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "novapath-db"
+database_id = "14ee9d5c-1fd9-4296-968d-342cae8ed34c"
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "novapath-images"
