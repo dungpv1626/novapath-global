@@ -13,9 +13,9 @@ export const db = new Proxy({} as PrismaClient, {
         const adapter = new PrismaBetterSqlite3({ url: `file:${path.join(process.cwd(), 'dev.db')}` })
         _client = new PrismaClient({ adapter } as never)
       } else {
-        // Cloudflare D1
-        const { getRequestContext } = require('@cloudflare/next-on-pages')
-        const { PrismaD1 } = require('@prisma/adapter-d1')
+        // Cloudflare D1 — webpackIgnore prevents bundler from resolving these at build time
+        const { getRequestContext } = require(/* webpackIgnore: true */ '@cloudflare/next-on-pages')
+        const { PrismaD1 } = require(/* webpackIgnore: true */ '@prisma/adapter-d1')
         const { env } = getRequestContext()
         const adapter = new PrismaD1(env.DB)
         _client = new PrismaClient({ adapter } as never)
