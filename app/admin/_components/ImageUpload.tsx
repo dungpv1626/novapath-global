@@ -31,9 +31,9 @@ export default function ImageUpload({
       const fd = new FormData()
       fd.append('file', file)
       const res = await fetch('/api/admin/upload', { method: 'POST', body: fd })
-      const data = await res.json()
+      const data = await res.json() as { url?: string; error?: string }
       if (!res.ok) throw new Error(data.error ?? 'Upload thất bại')
-      onChange(data.url)
+      onChange(data.url!)
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : 'Lỗi upload')
     } finally {
