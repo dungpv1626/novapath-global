@@ -1,4 +1,5 @@
-﻿export const dynamic = 'force-dynamic'
+﻿export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 import { db } from '@/lib/db'
 import Link from 'next/link'

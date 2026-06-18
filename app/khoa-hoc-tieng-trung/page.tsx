@@ -1,4 +1,5 @@
-﻿export const dynamic = 'force-dynamic'
+﻿export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
 import PageHero from '@/components/ui/PageHero'
