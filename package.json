@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:cf": "npx @cloudflare/next-on-pages",
+    "build:cf": "npx prisma generate && npx @cloudflare/next-on-pages",
     "deploy:cf": "npm run build:cf && wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
