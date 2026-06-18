@@ -12,7 +12,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const data = await req.json() as Record<string, unknown> as Record<string, unknown>
+  const data = await req.json() as any as any
   const item = await db.scholarship.create({
     data: {
       name: data.name,

@@ -2,7 +2,7 @@
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json() as Record<string, unknown> as Record<string, unknown>
+    const body = await req.json() as any as any
     const { name, phone, email, program, message } = body
 
     if (!name || !phone || !email) {

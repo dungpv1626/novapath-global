@@ -12,7 +12,7 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  const data = await req.json() as Record<string, unknown> as Record<string, unknown>
+  const data = await req.json() as any as any
   const settings = await db.siteSettings.upsert({
     where: { id: 'main' },
     update: {

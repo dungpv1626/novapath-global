@@ -6,7 +6,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
-  const data = await req.json() as Record<string, unknown>
+  const data = await req.json() as any
   const item = await db.university.update({
     where: { id },
     data: {

@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+﻿import NextAuth from 'next-auth'
 import { authConfig } from '@/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     // Cloudflare R2
     const { getRequestContext } = await import('@cloudflare/next-on-pages')
     const { env } = getRequestContext()
-    const r2 = (env as Record<string, unknown>).IMAGES as R2Bucket | undefined
+    const r2 = (env as any).IMAGES as R2Bucket | undefined
 
     if (!r2) {
       return NextResponse.json({ error: 'R2 chưa được cấu hình' }, { status: 500 })
