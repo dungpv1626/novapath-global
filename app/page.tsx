@@ -1,3 +1,5 @@
+﻿export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import RevealProvider from '@/components/RevealProvider'
 import Hero from '@/components/sections/Hero'

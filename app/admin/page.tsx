@@ -1,3 +1,5 @@
+﻿export const dynamic = 'force-dynamic'
+
 import { db } from '@/lib/db'
 import { FileText, GraduationCap, Award, BookOpen, Users, Settings } from 'lucide-react'
 import Link from 'next/link'
