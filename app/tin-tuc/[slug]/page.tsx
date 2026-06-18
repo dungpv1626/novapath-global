@@ -1,4 +1,6 @@
-﻿export const runtime = 'edge'
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,22 +9,18 @@ import { Clock, ArrowLeft, ArrowRight } from 'lucide-react'
 import CTABanner from '@/components/ui/CTABanner'
 import Button from '@/components/ui/Button'
 import RevealProvider from '@/components/RevealProvider'
-import { getAllPosts, getPostBySlug } from '@/lib/blog'
+import { db } from '@/lib/db'
 import { Phone } from 'lucide-react'
 
 interface Props { params: Promise<{ slug: string }> }
 
-export async function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }))
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await db.blogPost.findUnique({ where: { slug, published: true } })
   if (!post) return {}
   return {
     title: `${post.title} — NOVAPATH GLOBAL`,
-    description: post.description,
+    description: post.excerpt,
   }
 }
 
@@ -47,11 +45,18 @@ function renderMarkdown(content: string): string {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await db.blogPost.findUnique({ where: { slug, published: true } })
   if (!post) notFound()
 
-  const allPosts = getAllPosts()
-  const related = allPosts.filter((p) => p.slug !== slug && p.category === post.category).slice(0, 3)
+  const related = await db.blogPost.findMany({
+    where: { published: true, category: post.category, NOT: { slug } },
+    take: 3,
+    orderBy: { publishedAt: 'desc' },
+  })
+
+  const dateStr = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    : ''
 
   return (
     <RevealProvider>
@@ -72,7 +77,7 @@ export default async function BlogPostPage({ params }: Props) {
             <span className="w-1 h-1 rounded-full bg-white/32" />
             <span>{post.author}</span>
             <span className="w-1 h-1 rounded-full bg-white/32" />
-            <span>{post.date}</span>
+            <span>{dateStr}</span>
           </div>
         </div>
       </section>
@@ -80,7 +85,7 @@ export default async function BlogPostPage({ params }: Props) {
       {/* Cover image */}
       <div className="max-w-[1000px] mx-auto px-[clamp(20px,5vw,56px)] -mt-[58px] relative z-10">
         <Image
-          src={post.coverImg}
+          src={post.coverImage}
           alt={post.title}
           width={1000}
           height={440}
@@ -91,7 +96,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Prose */}
       <div className="max-w-[768px] mx-auto px-[clamp(20px,5vw,56px)] prose" style={{ paddingBlock: 'clamp(38px,5vw,60px)' }}>
-        <p className="lead-p">{post.description}</p>
+        <p className="lead-p">{post.excerpt}</p>
         <div dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
 
         {/* Tags */}
@@ -123,7 +128,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <Link key={p.slug} href={`/tin-tuc/${p.slug}`}
                   className="group bg-white border border-line rounded-[22px] overflow-hidden shadow-[0_12px_30px_-16px_rgba(15,40,95,0.22)] hover:-translate-y-2 transition-all duration-300 flex flex-col">
                   <div className="relative h-[200px]">
-                    <Image src={p.coverImg} alt={p.title} fill className="object-cover" />
+                    <Image src={p.coverImage} alt={p.title} fill className="object-cover" />
                   </div>
                   <div className="p-[22px] flex flex-col flex-1">
                     <h3 className="text-[17px] mb-2 group-hover:text-primary transition-colors leading-[1.3]">{p.title}</h3>
