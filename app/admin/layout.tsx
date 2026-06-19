@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import type { Metadata } from 'next'
 import { SessionProvider } from 'next-auth/react'
 import AdminSidebar from './AdminSidebar'

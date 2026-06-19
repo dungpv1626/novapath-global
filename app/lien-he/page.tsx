@@ -1,3 +1,5 @@
+export const runtime = 'edge'
+
 import type { Metadata } from 'next'
 import { MapPin, Mail, Phone, Clock } from 'lucide-react'
 import PageHero from '@/components/ui/PageHero'

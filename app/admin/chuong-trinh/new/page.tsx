@@ -1,3 +1,4 @@
+export const runtime = 'edge'
 import ProgramForm from '../ProgramForm'
 
 export default function NewProgramPage() {

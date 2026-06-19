@@ -1,3 +1,4 @@
+export const runtime = 'edge'
 import CityForm from '../CityForm'
 
 export default function NewCityPage() {
