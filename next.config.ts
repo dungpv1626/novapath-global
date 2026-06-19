@@ -21,21 +21,24 @@ const nextConfig: NextConfig = {
       // Edge runtime webpack cannot handle node: URI scheme natively
       // (UnhandledSchemeError). 'module' type also fails ("doesn't support
       // dynamic import"). Use 'commonjs' — webpack emits require() calls
-      // without reading the files. next-on-pages esbuild converts CJS to ESM
-      // and Cloudflare Workers resolves node:* at runtime via nodejs_compat.
+      // without reading the files. nodejs_compat in wrangler.toml resolves
+      // node:* at runtime in Cloudflare Workers.
+      //
+      // @cloudflare/next-on-pages is NOT listed here — all imports of that
+      // package use /* webpackIgnore: true */ so webpack leaves them as native
+      // import() calls. next-on-pages esbuild then handles them natively.
       config.externals = [
         ...prev,
         (ctx: { request?: string }, cb: (e: null, r?: string) => void) => {
           const req = ctx.request ?? ''
           if (req.startsWith('node:')) return cb(null, `commonjs ${req}`)
-          if (req === '@cloudflare/next-on-pages') return cb(null, 'commonjs @cloudflare/next-on-pages')
           cb(null)
         },
       ]
     } else {
-      // Node.js runtime: @cloudflare/next-on-pages is ESM-only (no "require" exports
-      // condition). Bypass exports field validation with a CJS external — webpack emits
-      // require('@cloudflare/next-on-pages') and esbuild resolves it in the CF build.
+      // Node.js runtime: @cloudflare/next-on-pages is ESM-only (no "require"
+      // exports condition). Externalise with CJS wrapper so webpack doesn't
+      // try to bundle it and fail with ERR_PACKAGE_PATH_NOT_EXPORTED.
       config.externals = [
         ...prev,
         { '@cloudflare/next-on-pages': 'commonjs @cloudflare/next-on-pages' },

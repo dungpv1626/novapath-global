@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   if (process.env.NODE_ENV === 'production') {
     // Cloudflare R2
-    const { getRequestContext } = await import('@cloudflare/next-on-pages')
+    const { getRequestContext } = await import(/* webpackIgnore: true */ '@cloudflare/next-on-pages')
     const { env } = getRequestContext()
     const r2 = (env as any).IMAGES as R2Bucket | undefined
 
