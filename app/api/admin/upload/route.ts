@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     // Cloudflare R2 — read env from the global CF context that next-on-pages
     // populates before every edge handler (Symbol.for("__cloudflare-request-context__"))
     const cfCtx = (globalThis as any)[Symbol.for('__cloudflare-request-context__')]
-    const r2 = cfCtx?.env?.IMAGES as R2Bucket | undefined
+    const r2 = cfCtx?.env?.IMAGES as any
 
     if (!r2) {
       return NextResponse.json({ error: 'R2 chưa được cấu hình' }, { status: 500 })
