@@ -18,18 +18,17 @@ const nextConfig: NextConfig = {
     ) as unknown[]
 
     if (nextRuntime === 'edge') {
-      // Edge runtime webpack cannot handle node: scheme natively.
-      // Mark node:* built-ins as ESM module externals so webpack emits
-      // `import 'node:crypto'` etc. — next-on-pages esbuild then marks
-      // them as external, and Cloudflare Workers resolves them at runtime
-      // via the nodejs_compat flag in wrangler.toml.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // Edge runtime webpack cannot handle node: URI scheme natively
+      // (UnhandledSchemeError). 'module' type also fails ("doesn't support
+      // dynamic import"). Use 'commonjs' — webpack emits require() calls
+      // without reading the files. next-on-pages esbuild converts CJS to ESM
+      // and Cloudflare Workers resolves node:* at runtime via nodejs_compat.
       config.externals = [
         ...prev,
         (ctx: { request?: string }, cb: (e: null, r?: string) => void) => {
           const req = ctx.request ?? ''
-          if (req.startsWith('node:')) return cb(null, `module ${req}`)
-          if (req === '@cloudflare/next-on-pages') return cb(null, 'module @cloudflare/next-on-pages')
+          if (req.startsWith('node:')) return cb(null, `commonjs ${req}`)
+          if (req === '@cloudflare/next-on-pages') return cb(null, 'commonjs @cloudflare/next-on-pages')
           cb(null)
         },
       ]
