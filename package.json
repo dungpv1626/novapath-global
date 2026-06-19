@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "build:cf": "npx prisma generate && npx @cloudflare/next-on-pages",
+    "build:cf": "npx @cloudflare/next-on-pages",
     "deploy:cf": "npm run build:cf && wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
@@ -14,6 +14,7 @@
     "@prisma/adapter-better-sqlite3": "^7.8.0",
     "@prisma/adapter-d1": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@supabase/supabase-js": "^2.108.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/better-sqlite3": "^7.6.13",
     "bcryptjs": "^3.0.3",

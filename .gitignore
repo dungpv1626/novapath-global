@@ -53,3 +53,5 @@ next-env.d.ts
 d1-seed-data.json
 d1-seed.sql
 d1-schema.sql
+d1-export.json
+supabase-seed.sql
