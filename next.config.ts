@@ -19,14 +19,10 @@ const nextConfig: NextConfig = {
 
     if (nextRuntime === 'edge') {
       // Edge runtime webpack cannot handle node: URI scheme natively
-      // (UnhandledSchemeError). 'module' type also fails ("doesn't support
-      // dynamic import"). Use 'commonjs' — webpack emits require() calls
-      // without reading the files. nodejs_compat in wrangler.toml resolves
-      // node:* at runtime in Cloudflare Workers.
-      //
-      // @cloudflare/next-on-pages is NOT listed here — all imports of that
-      // package use /* webpackIgnore: true */ so webpack leaves them as native
-      // import() calls. next-on-pages esbuild then handles them natively.
+      // (UnhandledSchemeError). 'commonjs' type emits require() calls that
+      // nodejs_compat in wrangler.toml resolves at runtime in CF Workers.
+      // @cloudflare/next-on-pages is NOT imported anywhere in our runtime code
+      // (lib/db.ts reads the CF context via Symbol.for directly).
       config.externals = [
         ...prev,
         (ctx: { request?: string }, cb: (e: null, r?: string) => void) => {
@@ -34,14 +30,6 @@ const nextConfig: NextConfig = {
           if (req.startsWith('node:')) return cb(null, `commonjs ${req}`)
           cb(null)
         },
-      ]
-    } else {
-      // Node.js runtime: @cloudflare/next-on-pages is ESM-only (no "require"
-      // exports condition). Externalise with CJS wrapper so webpack doesn't
-      // try to bundle it and fail with ERR_PACKAGE_PATH_NOT_EXPORTED.
-      config.externals = [
-        ...prev,
-        { '@cloudflare/next-on-pages': 'commonjs @cloudflare/next-on-pages' },
       ]
     }
 

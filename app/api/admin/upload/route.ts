@@ -29,10 +29,10 @@ export async function POST(request: NextRequest) {
   const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
 
   if (process.env.NODE_ENV === 'production') {
-    // Cloudflare R2
-    const { getRequestContext } = await import(/* webpackIgnore: true */ '@cloudflare/next-on-pages')
-    const { env } = getRequestContext()
-    const r2 = (env as any).IMAGES as R2Bucket | undefined
+    // Cloudflare R2 — read env from the global CF context that next-on-pages
+    // populates before every edge handler (Symbol.for("__cloudflare-request-context__"))
+    const cfCtx = (globalThis as any)[Symbol.for('__cloudflare-request-context__')]
+    const r2 = cfCtx?.env?.IMAGES as R2Bucket | undefined
 
     if (!r2) {
       return NextResponse.json({ error: 'R2 chưa được cấu hình' }, { status: 500 })
