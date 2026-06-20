@@ -2,16 +2,17 @@
 export const dynamic = 'force-dynamic'
 
 import { db } from '@/lib/db'
-import { FileText, GraduationCap, Award, BookOpen, Users, Settings } from 'lucide-react'
+import { FileText, GraduationCap, Award, BookOpen, Users, Settings, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
-  const [blogs, universities, scholarships, courses, team] = await Promise.all([
+  const [blogs, universities, scholarships, courses, team, contacts] = await Promise.all([
     db.blogPost.count(),
     db.university.count(),
     db.scholarship.count(),
     db.course.count(),
     db.teamMember.count(),
+    db.contactSubmission.count({ where: { read: false } }),
   ])
 
   const recentBlogs = await db.blogPost.findMany({
@@ -20,12 +21,12 @@ export default async function AdminDashboard() {
   })
 
   const stats = [
+    { label: 'Liên hệ chưa đọc', value: contacts, icon: MessageSquare, href: '/admin/lien-he', color: 'bg-[#fde7ee] text-[#d6486f]' },
     { label: 'Bài viết', value: blogs, icon: FileText, href: '/admin/blog', color: 'bg-[#e7effd] text-[#1d5fe0]' },
     { label: 'Trường ĐH', value: universities, icon: GraduationCap, href: '/admin/truong', color: 'bg-[#e3f6ec] text-[#1c9b63]' },
     { label: 'Học bổng', value: scholarships, icon: Award, href: '/admin/hoc-bong', color: 'bg-[#fdf0d8] text-[#c98208]' },
     { label: 'Khóa học', value: courses, icon: BookOpen, href: '/admin/khoa-hoc', color: 'bg-[#ece8fd] text-[#6a4fd6]' },
-    { label: 'Đội ngũ', value: team, icon: Users, href: '/admin/team', color: 'bg-[#fde7ee] text-[#d6486f]' },
-    { label: 'Cài đặt', value: '–', icon: Settings, href: '/admin/settings', color: 'bg-[#e0f5ff] text-[#0891c4]' },
+    { label: 'Đội ngũ', value: team, icon: Users, href: '/admin/team', color: 'bg-[#e0f5ff] text-[#0891c4]' },
   ]
 
   return (

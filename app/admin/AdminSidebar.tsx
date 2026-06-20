@@ -6,11 +6,12 @@ import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import {
   LayoutDashboard, FileText, GraduationCap, Award, BookOpen,
-  Users, Settings, LogOut, Globe, Layers, MapPin,
+  Users, Settings, LogOut, Globe, Layers, MapPin, MessageSquare,
 } from 'lucide-react'
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { href: '/admin/lien-he', label: 'Liên hệ tư vấn', icon: MessageSquare },
   { href: '/admin/blog', label: 'Blog / Tin tức', icon: FileText },
   { href: '/admin/truong', label: 'Trường đại học', icon: GraduationCap },
   { href: '/admin/hoc-bong', label: 'Học bổng', icon: Award },

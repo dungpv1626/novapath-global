@@ -141,4 +141,5 @@ export const db = {
   city: makeModel('City'),
   program: makeModel('Program'),
   siteSettings: makeModel('SiteSettings'),
+  contactSubmission: makeModel('ContactSubmission'),
 }

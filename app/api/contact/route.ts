@@ -1,22 +1,22 @@
-﻿export const runtime = 'edge'
+export const runtime = 'edge'
 import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/lib/db'
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json() as any as any
+    const body = await req.json() as any
     const { name, phone, email, program, message } = body
 
     if (!name || !phone || !email) {
-      return NextResponse.json({ error: 'Vui lÃ²ng Ä‘iá»n Ä‘áº§y Ä‘á»§ thÃ´ng tin báº¯t buá»™c.' }, { status: 400 })
+      return NextResponse.json({ error: 'Vui lòng điền đầy đủ thông tin bắt buộc.' }, { status: 400 })
     }
 
-    // TODO: Gá»­i email qua Resend/Nodemailer
-    // await sendEmail({ to: 'tuvan@novapath.vn', subject: `ÄÄƒng kÃ½ tÆ° váº¥n: ${name}`, body: ... })
+    await db.contactSubmission.create({
+      data: { name, phone, email, program: program || null, message: message || null, read: false },
+    })
 
-    console.log('[Contact Form]', { name, phone, email, program, message, at: new Date().toISOString() })
-
-    return NextResponse.json({ success: true, message: 'Cáº£m Æ¡n báº¡n Ä‘Ã£ Ä‘Äƒng kÃ½! ChÃºng tÃ´i sáº½ liÃªn há»‡ trong 24 giá».' })
+    return NextResponse.json({ success: true, message: 'Cảm ơn bạn đã đăng ký! Chúng tôi sẽ liên hệ trong 24 giờ.' })
   } catch {
-    return NextResponse.json({ error: 'ÄÃ£ xáº£y ra lá»—i. Vui lÃ²ng thá»­ láº¡i.' }, { status: 500 })
+    return NextResponse.json({ error: 'Đã xảy ra lỗi. Vui lòng thử lại.' }, { status: 500 })
   }
 }
