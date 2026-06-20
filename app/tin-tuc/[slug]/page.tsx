@@ -25,22 +25,55 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function renderMarkdown(content: string): string {
-  return content
+  const lines = content.split('\n')
+  const out: string[] = []
+  let i = 0
+
+  while (i < lines.length) {
+    const line = lines[i]
+
+    // Table block: collect all consecutive lines starting with |
+    if (line.trimStart().startsWith('|')) {
+      const tableLines: string[] = []
+      while (i < lines.length && lines[i].trimStart().startsWith('|')) {
+        tableLines.push(lines[i])
+        i++
+      }
+      const isSep = (l: string) => /^\|[\s\-:|]+\|$/.test(l.trim())
+      const parseCells = (l: string) =>
+        l.split('|').slice(1, -1).map((c) => c.trim())
+
+      let html = '<div style="overflow-x:auto"><table>'
+      let headDone = false
+      for (const tl of tableLines) {
+        if (isSep(tl)) { html += '</thead><tbody>'; headDone = true; continue }
+        const tag = headDone ? 'td' : 'th'
+        const cells = parseCells(tl)
+        const row = '<tr>' + cells.map((c) => `<${tag}>${c}</${tag}>`).join('') + '</tr>'
+        if (!headDone) html += '<thead>' + row
+        else html += row
+      }
+      html += headDone ? '</tbody></table></div>' : '</thead></table></div>'
+      out.push(html)
+      continue
+    }
+
+    out.push(line)
+    i++
+  }
+
+  return out.join('\n')
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
     .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
     .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>[\s\S]*?<\/li>[\s\S]*?)+/gm, (m) => {
-      const isOrdered = /^\d+\./.test(m)
-      return isOrdered ? `<ol>${m}</ol>` : `<ul>${m}</ul>`
-    })
+    .replace(/(<li>.*\n?)+/gm, (m) => `<ul>${m}</ul>`)
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
     .replace(/\n\n/g, '</p><p>')
-    .replace(/^(?!<[hbouali])(.+)$/gm, '<p>$1</p>')
+    .replace(/^(?!<[hboulitp])(.+)$/gm, '<p>$1</p>')
     .replace(/<p><\/p>/g, '')
-    .replace(/\| (.+) \| (.+) \| (.+) \|/g, '<tr><td>$1</td><td>$2</td><td>$3</td></tr>')
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -65,12 +98,14 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(760px 380px at 86% -12%,rgba(56,189,248,.2),transparent 60%),radial-gradient(680px 380px at 0% 120%,rgba(29,95,224,.3),transparent 60%)' }} />
         <div className="relative max-w-[840px] mx-auto px-[clamp(20px,5vw,56px)]">
-          <Link href="/tin-tuc" className="inline-flex items-center gap-2 font-[family-name:var(--font-head)] font-semibold text-[14px] text-primary mb-6">
-            <ArrowLeft size={16} /> Quay lại tin tức
+          <Link href="/tin-tuc" className="flex items-center gap-2 font-[family-name:var(--font-head)] font-semibold text-[14px] text-[#7dd3fc] hover:text-white transition-colors mb-5 w-fit">
+            <ArrowLeft size={15} /> Quay lại tin tức
           </Link>
-          <span className="inline-block bg-primary text-white font-[family-name:var(--font-head)] font-semibold text-[12px] uppercase tracking-[0.06em] px-[14px] py-[6px] rounded-[999px] mb-[18px]">
-            {post.category}
-          </span>
+          <div className="mb-[18px]">
+            <span className="inline-block bg-primary text-white font-[family-name:var(--font-head)] font-semibold text-[12px] uppercase tracking-[0.06em] px-[14px] py-[6px] rounded-[999px]">
+              {post.category}
+            </span>
+          </div>
           <h1 className="text-white mb-[18px]" style={{ fontSize: 'clamp(28px,4vw,46px)', lineHeight: 1.15 }}>{post.title}</h1>
           <div className="flex gap-[14px] flex-wrap text-[#a9bdde] text-[14.5px] items-center">
             <span className="flex items-center gap-1"><Clock size={14} /> {post.readTime}</span>
