@@ -54,7 +54,7 @@ export default async function NewsPage() {
                   <div className="flex items-center gap-4 text-[13.5px] text-muted mb-6">
                     <span className="flex items-center gap-1"><Clock size={14} /> {featured.readTime}</span>
                     <span>{featured.author}</span>
-                    <span>{featured.publishedAt?.toLocaleDateString('vi-VN') ?? ''}</span>
+                    <span>{featured.publishedAt ? new Date(featured.publishedAt).toLocaleDateString('vi-VN') : ''}</span>
                   </div>
                   <span className="inline-flex items-center gap-2 font-[family-name:var(--font-head)] font-semibold text-primary">
                     Đọc bài <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -86,7 +86,7 @@ export default async function NewsPage() {
                   <p className="text-muted text-[14px] flex-1 mb-4 line-clamp-2">{post.excerpt}</p>
                   <div className="flex items-center justify-between text-[13px] text-muted pt-4 border-t border-line">
                     <span className="flex items-center gap-1"><Clock size={13} /> {post.readTime}</span>
-                    <span>{post.publishedAt?.toLocaleDateString('vi-VN') ?? ''}</span>
+                    <span>{post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('vi-VN') : ''}</span>
                   </div>
                 </div>
               </Link>
