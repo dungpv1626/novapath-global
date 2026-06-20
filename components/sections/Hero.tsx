@@ -5,7 +5,15 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
-export default function Hero() {
+interface HeroProps {
+  title?: string
+  subtitle?: string
+  statVisa?: number
+  statSchools?: number
+  statYears?: number
+}
+
+export default function Hero({ title, subtitle, statVisa, statSchools, statYears }: HeroProps) {
   const statsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -55,11 +63,11 @@ export default function Hero() {
           </span>
 
           <h1 className="tracking-[-0.025em] mb-[22px]" style={{ fontSize: 'clamp(36px,5.4vw,62px)', color: 'white' }}>
-            Chinh phục <span style={{ background: 'linear-gradient(120deg,#38bdf8,#7dd3fc)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }}>giấc mơ du học</span> Trung Quốc
+            {title ?? 'Chinh phục giấc mơ du học Trung Quốc'}
           </h1>
 
           <p className="text-[#aebfda] max-w-[50ch] mb-[34px]" style={{ fontSize: 'clamp(16px,1.5vw,19px)' }}>
-            NOVAPATH GLOBAL chuyên tư vấn du học Trung Quốc: chọn trường, làm hồ sơ, săn học bổng và đào tạo tiếng Trung — minh bạch, tận tâm, đúng lộ trình.
+            {subtitle ?? 'NOVAPATH GLOBAL chuyên tư vấn du học Trung Quốc: chọn trường, làm hồ sơ, săn học bổng và đào tạo tiếng Trung — minh bạch, tận tâm, đúng lộ trình.'}
           </p>
 
           <div className="flex flex-wrap gap-4 mb-10">
@@ -73,9 +81,9 @@ export default function Hero() {
 
           <div ref={statsRef} className="flex gap-[34px] flex-wrap">
             {[
-              { count: '98', suffix: '%', label: 'Tỷ lệ đậu visa' },
-              { count: '500', suffix: '+', label: 'Trường đối tác TQ' },
-              { count: '12', suffix: '+', label: 'Năm kinh nghiệm' },
+              { count: String(statVisa ?? 98), suffix: '%', label: 'Tỷ lệ đậu visa' },
+              { count: String(statSchools ?? 500), suffix: '+', label: 'Trường đối tác TQ' },
+              { count: String(statYears ?? 12), suffix: '+', label: 'Năm kinh nghiệm' },
             ].map((s) => (
               <div key={s.label} className="relative pl-[18px] before:absolute before:left-0 before:top-1 before:bottom-1 before:w-[3px] before:rounded-[3px] before:bg-sky-brand">
                 <div className="font-[family-name:var(--font-head)] font-bold text-[30px] text-white leading-none" data-count={s.count} data-suffix={s.suffix}>0</div>

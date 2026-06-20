@@ -14,16 +14,25 @@ import HomeTestimonials from '@/components/sections/HomeTestimonials'
 import CTABanner from '@/components/ui/CTABanner'
 import Button from '@/components/ui/Button'
 import { ArrowRight, Phone } from 'lucide-react'
+import { db } from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'NOVAPATH GLOBAL — Du học Trung Quốc uy tín',
   description: 'NOVAPATH GLOBAL — Tư vấn du học Trung Quốc trọn gói: trường đại học, học bổng, khóa học tiếng Trung.',
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await db.siteSettings.findUnique({ where: { id: 'main' } })
+
   return (
     <RevealProvider>
-      <Hero />
+      <Hero
+        title={settings?.heroTitle}
+        subtitle={settings?.heroSubtitle}
+        statVisa={settings?.statVisa}
+        statSchools={settings?.statSchools}
+        statYears={settings?.statYears}
+      />
 
       <HomeFeatures />
 
