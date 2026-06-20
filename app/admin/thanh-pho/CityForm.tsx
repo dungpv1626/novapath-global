@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls } from '../_components/FormCard'
 import ImageUpload from '../_components/ImageUpload'
-import { City } from '@/lib/generated/prisma/client'
+interface City { id: string; name: string; meta: string; image: string; order: number; createdAt: Date; updatedAt: Date }
 
 interface Props { city?: City }
 

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls, textareaCls } from '../_components/FormCard'
-import { Scholarship } from '@/lib/generated/prisma/client'
+interface Scholarship { id: string; name: string; amount: string; conditions: string; popular: boolean; gradient: string; order: number; createdAt: Date; updatedAt: Date }
 
 interface Props { scholarship?: Scholarship }
 

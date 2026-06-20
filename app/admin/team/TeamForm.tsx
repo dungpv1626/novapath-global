@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls } from '../_components/FormCard'
 import ImageUpload from '../_components/ImageUpload'
-import { TeamMember } from '@/lib/generated/prisma/client'
+interface TeamMember { id: string; name: string; role: string; image: string; order: number; createdAt: Date; updatedAt: Date }
 
 interface Props { member?: TeamMember }
 

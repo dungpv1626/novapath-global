@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import FormCard, { Field, inputCls, textareaCls } from '../_components/FormCard'
-import { SiteSettings } from '@/lib/generated/prisma/client'
+interface SiteSettings { id: string; heroTitle: string; heroSubtitle: string; statVisa: number; statSchools: number; statYears: number; phone: string; email: string; facebook: string; instagram: string; youtube: string; updatedAt: Date }
 
 interface Props { settings: SiteSettings | null }
 

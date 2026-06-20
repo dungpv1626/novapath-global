@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls, textareaCls } from '../_components/FormCard'
 import ImageUpload from '../_components/ImageUpload'
-import { University } from '@/lib/generated/prisma/client'
+interface University { id: string; slug: string; name: string; nameEn: string; city: string; rank: number; established: number; students: string; programs: string; tuition: string; highlights: string; img: string; description: string; order: number; createdAt: Date; updatedAt: Date }
 
 interface Props { university?: University }
 

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls, textareaCls } from '../_components/FormCard'
 import ImageUpload from '../_components/ImageUpload'
-import { BlogPost } from '@/lib/generated/prisma/client'
+interface BlogPost { id: string; slug: string; title: string; excerpt: string; content: string; category: string; author: string; authorRole: string; coverImage: string; readTime: string; published: boolean; publishedAt: Date | null; createdAt: Date; updatedAt: Date }
 
 interface Props {
   post?: BlogPost

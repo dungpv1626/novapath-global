@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import FormCard, { Field, inputCls } from '../_components/FormCard'
 import ImageUpload from '../_components/ImageUpload'
-import { Program } from '@/lib/generated/prisma/client'
-
 const TAB_OPTIONS = [
   { value: 'dai-hoc', label: 'Đại học' },
   { value: 'thac-si', label: 'Thạc sĩ' },
   { value: 'tieng-du-bi', label: 'Tiếng & Dự bị' },
   { value: 'trung-hoc', label: 'Trung học' },
 ]
+
+interface Program { id: string; title: string; tag: string; tab: string; rating: number; reviews: string; duration: string; note: string; price: string; priceUnit: string; image: string; order: number; createdAt: Date; updatedAt: Date }
 
 interface Props { program?: Program }
 
