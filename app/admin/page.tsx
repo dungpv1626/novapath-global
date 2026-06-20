@@ -17,7 +17,6 @@ export default async function AdminDashboard() {
   const recentBlogs = await db.blogPost.findMany({
     orderBy: { createdAt: 'desc' },
     take: 5,
-    select: { id: true, title: true, published: true, createdAt: true },
   })
 
   const stats = [
