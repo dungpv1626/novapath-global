@@ -101,7 +101,7 @@ export default function Hero({ title, subtitle, statVisa, statSchools, statYears
               src="/images/hero-banner-v2.jpg"
               alt="Học bổng du học Trung Quốc cùng NOVAPATH GLOBAL"
               fill
-              className="object-cover object-center"
+              className="object-cover object-right"
               priority
             />
             {/* subtle vignette bottom */}
