@@ -29,12 +29,13 @@ async function hmacKey(usage: KeyUsage[]): Promise<CryptoKey> {
   )
 }
 
-// HMAC-SHA256(password, AUTH_SECRET) — single op, microseconds, safe for Cloudflare Workers 10ms CPU limit
-const STORED_HEX = '30d442804a532955bbaa787fd0a7a9cc0241133efff8b72e8902ca66103d5c05'
+// HMAC-SHA256(password, FIXED_PW_KEY) — fixed internal key, independent of AUTH_SECRET env var
+const FIXED_PW_KEY = 'novapath-pw-v1'
+const STORED_HEX = 'afd01acaba50d9c49757e65abe7a6ad61ef3d85cc360fae04d3c99814feba605'
 
 export async function verifyPassword(password: string): Promise<boolean> {
   const key = await crypto.subtle.importKey(
-    'raw', new TextEncoder().encode(getSecret()),
+    'raw', new TextEncoder().encode(FIXED_PW_KEY),
     { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
   )
   const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(password))
