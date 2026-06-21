@@ -6,14 +6,14 @@ import { FileText, GraduationCap, Award, BookOpen, Users, Settings, MessageSquar
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
-  const [blogs, universities, scholarships, courses, team, contacts] = await Promise.all([
+  const [blogs, universities, scholarships, courses, team] = await Promise.all([
     db.blogPost.count(),
     db.university.count(),
     db.scholarship.count(),
     db.course.count(),
     db.teamMember.count(),
-    db.contactSubmission.count({ where: { read: false } }),
   ])
+  const contacts = await db.contactSubmission.count({ where: { read: false } }).catch(() => 0)
 
   const recentBlogs = await db.blogPost.findMany({
     orderBy: { createdAt: 'desc' },
