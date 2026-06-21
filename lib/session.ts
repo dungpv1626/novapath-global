@@ -29,18 +29,16 @@ async function hmacKey(usage: KeyUsage[]): Promise<CryptoKey> {
   )
 }
 
-// PBKDF2 of 'novapath2026' with AUTH_SECRET+'novapath-auth-v2', 100000 iter, SHA-256
-const STORED_HEX = 'e3f51271d7e88b13849241ef2443a68d9d9f806c8cfb50f1c08718583e269f97'
+// HMAC-SHA256(password, AUTH_SECRET) — single op, microseconds, safe for Cloudflare Workers 10ms CPU limit
+const STORED_HEX = '30d442804a532955bbaa787fd0a7a9cc0241133efff8b72e8902ca66103d5c05'
 
 export async function verifyPassword(password: string): Promise<boolean> {
-  const enc = new TextEncoder()
-  const keyMat = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits'])
-  const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt: enc.encode(getSecret() + 'novapath-auth-v2').buffer as ArrayBuffer, iterations: 100000, hash: 'SHA-256' },
-    keyMat,
-    256
+  const key = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(getSecret()),
+    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
   )
-  const hex = Array.from(new Uint8Array(bits)).map((b) => b.toString(16).padStart(2, '0')).join('')
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(password))
+  const hex = Array.from(new Uint8Array(sig)).map((b) => b.toString(16).padStart(2, '0')).join('')
   return hex === STORED_HEX
 }
 
