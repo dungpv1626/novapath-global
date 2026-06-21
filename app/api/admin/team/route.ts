@@ -1,16 +1,16 @@
-﻿export const runtime = 'edge'
+export const runtime = 'edge'
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { getSession } from '@/lib/session'
 import { db } from '@/lib/db'
 
-export async function GET() {
-  const session = await auth()
+export async function GET(req: NextRequest) {
+  const session = await getSession(req)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   return NextResponse.json(await db.teamMember.findMany({ orderBy: { order: 'asc' } }))
 }
 
 export async function POST(req: NextRequest) {
-  const session = await auth()
+  const session = await getSession(req)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const data = await req.json() as any as any
   const item = await db.teamMember.create({

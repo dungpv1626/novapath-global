@@ -6,8 +6,7 @@ export function middleware(req: NextRequest) {
 
   if (!isLoginPage && pathname.startsWith('/admin')) {
     const token =
-      req.cookies.get('next-auth.session-token')?.value ??
-      req.cookies.get('__Secure-next-auth.session-token')?.value
+      req.cookies.get('novapath-admin-session')?.value
 
     if (!token) {
       const loginUrl = new URL('/admin/login', req.url)
@@ -18,8 +17,7 @@ export function middleware(req: NextRequest) {
 
   if (isLoginPage) {
     const token =
-      req.cookies.get('next-auth.session-token')?.value ??
-      req.cookies.get('__Secure-next-auth.session-token')?.value
+      req.cookies.get('novapath-admin-session')?.value
     if (token) {
       return NextResponse.redirect(new URL('/admin', req.url))
     }

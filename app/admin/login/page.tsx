@@ -2,7 +2,6 @@
 export const runtime = 'edge'
 
 import { useState } from 'react'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
@@ -17,17 +16,23 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
-    setLoading(false)
-    if (res?.error) {
-      setError('Email hoặc mật khẩu không đúng')
-    } else {
-      router.push('/admin')
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      if (res.ok) {
+        router.push('/admin')
+        router.refresh()
+      } else {
+        const data = await res.json() as { error?: string }
+        setError(data.error || 'Email hoặc mật khẩu không đúng')
+      }
+    } catch {
+      setError('Đã xảy ra lỗi. Vui lòng thử lại.')
     }
+    setLoading(false)
   }
 
   return (

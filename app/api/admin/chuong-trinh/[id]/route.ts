@@ -1,12 +1,12 @@
-﻿export const runtime = 'edge'
+export const runtime = 'edge'
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { getSession } from '@/lib/session'
 import { db } from '@/lib/db'
 
 interface Props { params: Promise<{ id: string }> }
 
 export async function PUT(req: NextRequest, { params }: Props) {
-  const session = await auth()
+  const session = await getSession(req)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   const data = await req.json() as any
@@ -29,8 +29,8 @@ export async function PUT(req: NextRequest, { params }: Props) {
   return NextResponse.json(item)
 }
 
-export async function DELETE(_req: NextRequest, { params }: Props) {
-  const session = await auth()
+export async function DELETE(req: NextRequest, { params }: Props) {
+  const session = await getSession(req)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   await db.program.delete({ where: { id } })

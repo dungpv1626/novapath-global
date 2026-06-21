@@ -1,9 +1,5 @@
-﻿import NextAuth from 'next-auth'
-import { authConfig } from '@/auth.config'
 import { NextRequest, NextResponse } from 'next/server'
-
-// Use edge-safe auth (no Prisma/bcryptjs) — session is JWT-based, no DB needed
-const { auth } = NextAuth(authConfig)
+import { getSession } from '@/lib/session'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']
 const MAX_SIZE = 5 * 1024 * 1024
@@ -11,7 +7,7 @@ const MAX_SIZE = 5 * 1024 * 1024
 export const runtime = 'edge'
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
+  const session = await getSession(request)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const formData = await request.formData()

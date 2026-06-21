@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { signOut } from 'next-auth/react'
 import {
   LayoutDashboard, FileText, GraduationCap, Award, BookOpen,
   Users, Settings, LogOut, Globe, Layers, MapPin, MessageSquare,
@@ -70,7 +69,7 @@ export default function AdminSidebar() {
           Xem website
         </Link>
         <button
-          onClick={() => signOut({ callbackUrl: '/admin/login' })}
+          onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); window.location.href = '/admin/login' }}
           className="flex items-center gap-3 px-3 py-[10px] rounded-[10px] text-[13.5px] font-[family-name:var(--font-head)] font-medium text-[#9fb2d6] hover:bg-white/8 hover:text-white transition-colors w-full text-left"
         >
           <LogOut size={16} />
