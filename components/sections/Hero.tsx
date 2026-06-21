@@ -53,12 +53,12 @@ export default function Hero({ title, subtitle, statVisa, statSchools, statYears
       <div className="pointer-events-none absolute inset-0"
         style={{ background: 'radial-gradient(1100px 540px at 78% -8%,rgba(56,189,248,.20),transparent 60%),radial-gradient(820px 520px at 8% 108%,rgba(29,95,224,.34),transparent 60%)' }} />
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 min-h-[600px] lg:min-h-[680px]">
+      <div className="relative max-w-[1280px] mx-auto px-[clamp(20px,5vw,56px)] grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-[48px] items-center"
+        style={{ paddingBlock: 'clamp(64px,8vw,110px)' }}>
 
-        {/* Copy — left half, padded */}
-        <div className="reveal flex flex-col justify-center px-[clamp(20px,5vw,56px)] lg:pl-[max(40px,calc((100vw-1280px)/2+56px))] lg:pr-[48px]"
-          style={{ paddingBlock: 'clamp(54px,7vw,96px)' }}>
-          <span className="inline-flex items-center gap-[9px] bg-white/8 border border-white/16 text-[#dce8fb] text-[13.5px] font-medium px-4 py-2 rounded-[999px] mb-[26px] w-fit">
+        {/* Copy */}
+        <div className="reveal">
+          <span className="inline-flex items-center gap-[9px] bg-white/8 border border-white/16 text-[#dce8fb] text-[13.5px] font-medium px-4 py-2 rounded-[999px] mb-[26px]">
             <b className="text-sky-brand font-bold">★ 4.9/5</b> từ hơn 5.000 học viên & phụ huynh
           </span>
 
@@ -93,25 +93,26 @@ export default function Hero({ title, subtitle, statVisa, statSchools, statYears
           </div>
         </div>
 
-        {/* Visual — right half, full bleed to viewport edge */}
+        {/* Visual */}
         <div className="reveal reveal-d2 relative hidden lg:block">
-          {/* Gradient blend trái sang ảnh */}
-          <div className="absolute inset-y-0 left-0 w-[80px] z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, #0f1f3d, transparent)' }} />
-          {/* Glow dưới */}
-          <div className="absolute -bottom-[40px] right-[10%] w-[55%] h-[55%] rounded-full -z-10"
+          {/* Image container — fixed height so fill works */}
+          <div className="relative w-full rounded-[28px] overflow-hidden shadow-[0_48px_96px_-32px_rgba(0,0,0,0.7)]" style={{ height: '520px' }}>
+            <Image
+              src="/images/hero-banner-v2.jpg"
+              alt="Học bổng du học Trung Quốc cùng NOVAPATH GLOBAL"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+            {/* subtle vignette bottom */}
+            <div className="absolute inset-0 pointer-events-none rounded-[28px]"
+              style={{ background: 'linear-gradient(to top, rgba(15,31,61,0.3) 0%, transparent 50%)' }} />
+          </div>
+          {/* Glow */}
+          <div className="absolute -right-[20px] -bottom-[30px] w-[60%] h-[50%] -z-10 rounded-full"
             style={{ background: 'radial-gradient(circle,rgba(56,189,248,.35),transparent 70%)', filter: 'blur(40px)' }} />
-
-          <Image
-            src="/images/hero-banner-v2.jpg"
-            alt="Học bổng du học Trung Quốc cùng NOVAPATH GLOBAL"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-
           {/* Float cards */}
-          <div className="absolute top-[10%] left-[4%] z-20 bg-white text-ink rounded-[16px] px-[18px] py-[14px] shadow-[0_24px_60px_-28px_rgba(15,40,95,0.40)] flex items-center gap-3 animate-[floaty_4.5s_ease-in-out_infinite_0.6s]">
+          <div className="absolute top-[28px] -left-[24px] bg-white text-ink rounded-[16px] px-[18px] py-[14px] shadow-[0_24px_60px_-28px_rgba(15,40,95,0.40)] flex items-center gap-3 animate-[floaty_4.5s_ease-in-out_infinite_0.6s]">
             <span className="w-[42px] h-[42px] rounded-[12px] bg-ic-green-bg text-ic-green-fg grid place-items-center">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
@@ -120,7 +121,7 @@ export default function Hero({ title, subtitle, statVisa, statSchools, statYears
               <div className="text-[12px] text-muted">Đại học Phúc Đán</div>
             </div>
           </div>
-          <div className="absolute bottom-[12%] right-[6%] z-20 bg-white text-ink rounded-[16px] px-[18px] py-[14px] shadow-[0_24px_60px_-28px_rgba(15,40,95,0.40)] flex items-center gap-3 animate-[floaty_4.5s_ease-in-out_infinite]">
+          <div className="absolute bottom-[48px] -right-[20px] bg-white text-ink rounded-[16px] px-[18px] py-[14px] shadow-[0_24px_60px_-28px_rgba(15,40,95,0.40)] flex items-center gap-3 animate-[floaty_4.5s_ease-in-out_infinite]">
             <span className="w-[42px] h-[42px] rounded-[12px] bg-ic-amber-bg text-ic-amber-fg grid place-items-center">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5"><path d="M12 2 15 8.5 22 9.3l-5 4.7L18.5 21 12 17.5 5.5 21 7 14 2 9.3 9 8.5z"/></svg>
             </span>
